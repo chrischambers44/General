@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>British Judo Contest Rules Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8102E;
+    --dark: #0a0a0a;
+    --charcoal: #1a1a1a;
+    --mid: #2a2a2a;
+    --light: #f0ece4;
+    --cream: #f8f5ef;
+    --gold: #D4AF37;
+    --correct: #2d7a4a;
+    --wrong: #C8102E;
+    --text: #e8e4dc;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--charcoal);
+    border-bottom: 3px solid var(--red);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .judo-mark {
+    width: 48px;
+    height: 48px;
+    background: var(--red);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: white;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .logo-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.12em;
+    color: var(--light);
+    line-height: 1;
+  }
+
+  .logo-text p {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .header-badge {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: right;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── HOME SCREEN ── */
+  .hero {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 1.2rem;
+  }
+
+  .hero h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    letter-spacing: 0.06em;
+    line-height: 0.95;
+    color: var(--light);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h2 span { color: var(--red); }
+
+  .hero p {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+  }
+
+  /* ── CATEGORY GRID ── */
+  .mode-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+  }
+
+  .mode-card {
+    background: var(--charcoal);
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mode-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--red);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+    transform-origin: bottom;
+  }
+
+  .mode-card:hover { border-color: var(--red); background: #222; transform: translateY(-2px); }
+  .mode-card:hover::before { transform: scaleY(1); }
+
+  .mode-card.random-card {
+    grid-column: 1 / -1;
+    border-color: var(--red);
+    background: linear-gradient(135deg, #1a0a0a 0%, var(--charcoal) 100%);
+  }
+
+  .mode-card.random-card::before { transform: scaleY(1); background: var(--gold); }
+
+  .mode-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+  .mode-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.08em;
+    color: var(--light);
+    margin-bottom: 0.3rem;
+  }
+
+  .mode-card .desc { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+  .mode-card .count { font-size: 0.7rem; color: var(--red); margin-top: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ── QUIZ SCREEN ── */
+  .quiz-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .quiz-meta {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .quiz-category {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    color: var(--red);
+  }
+
+  /* Progress bar */
+  .progress-track {
+    height: 3px;
+    background: var(--mid);
+    border-radius: 2px;
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* Score display */
+  .score-display {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .score-pill {
+    background: var(--charcoal);
+    border: 1px solid #333;
+    border-radius: 2px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .score-pill span { color: var(--gold); font-weight: 600; }
+
+  /* Question card */
+  .question-card {
+    background: var(--charcoal);
+    border: 1px solid #2e2e2e;
+    border-radius: 4px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .question-ref {
+    font-size: 0.68rem;
+    color: var(--red);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .question-ref::before {
+    content: '';
+    width: 16px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  .question-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--light);
+    font-weight: 500;
+  }
+
+  /* Options */
+  .options-grid {
+    display: grid;
+    gap: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .option-btn {
+    background: var(--charcoal);
+    border: 1px solid #333;
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.15s;
+    text-align: left;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--red);
+    background: #222;
+    transform: translateX(4px);
+  }
+
+  .option-letter {
+    min-width: 28px;
+    height: 28px;
+    border-radius: 2px;
+    border: 1px solid #444;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .option-btn.correct {
+    background: #0d2b1a;
+    border-color: var(--correct);
+    color: #6dffaa;
+  }
+
+  .option-btn.correct .option-letter {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: white;
+  }
+
+  .option-btn.wrong {
+    background: #2b0d0d;
+    border-color: var(--wrong);
+    color: #ff8888;
+  }
+
+  .option-btn.wrong .option-letter {
+    background: var(--wrong);
+    border-color: var(--wrong);
+    color: white;
+  }
+
+  .option-btn.reveal {
+    background: #0d2b1a;
+    border-color: var(--correct);
+    color: #6dffaa;
+    opacity: 0.6;
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  /* Explanation */
+  .explanation {
+    display: none;
+    background: var(--mid);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #ccc;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--gold); }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* Buttons */
+  .btn {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.12em;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    padding: 0.9rem 2rem;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: white;
+  }
+
+  .btn-primary:hover { background: #a00c23; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid #444;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .btn-ghost:hover { border-color: var(--red); color: var(--light); }
+
+  .btn-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── RESULTS SCREEN ── */
+  .results-wrap {
+    max-width: 680px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+    text-align: center;
+  }
+
+  .results-ring {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 6px solid var(--charcoal);
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .results-ring svg {
+    position: absolute;
+    top: -6px; left: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    transform: rotate(-90deg);
+  }
+
+  .results-ring svg circle {
+    fill: none;
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+
+  .ring-bg { stroke: var(--charcoal); }
+  .ring-fill { stroke: var(--red); transition: stroke-dashoffset 1s ease; }
+
+  .results-pct {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 0.05em;
+    color: var(--light);
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .results-label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .results-grade {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .results-msg {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .results-breakdown {
+    background: var(--charcoal);
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .breakdown-item {
+    text-align: center;
+  }
+
+  .breakdown-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.05em;
+    color: var(--light);
+  }
+
+  .breakdown-num.green { color: #6dffaa; }
+  .breakdown-num.red { color: #ff8888; }
+
+  .breakdown-lbl {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Review missed */
+  .review-section {
+    text-align: left;
+    margin-top: 2rem;
+  }
+
+  .review-header {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    color: var(--light);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #333;
+  }
+
+  .review-item {
+    background: var(--charcoal);
+    border: 1px solid #2e2e2e;
+    border-left: 3px solid var(--red);
+    border-radius: 0 3px 3px 0;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .review-item .q { color: var(--light); margin-bottom: 0.4rem; font-weight: 500; }
+  .review-item .a { color: var(--gold); }
+  .review-item .ref { font-size: 0.7rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.08em; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .mode-selector { grid-template-columns: 1fr; }
+    .mode-card.random-card { grid-column: 1; }
+    .results-breakdown { grid-template-columns: repeat(3, 1fr); }
+    header { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="judo-mark">BJA</div>
+    <div class="logo-text">
+      <h1>Contest Rules Quiz</h1>
+      <p>British Judo Association · IJF SOR 30/01/2025</p>
+    </div>
+  </div>
+  <div class="header-badge">BJA Version<br>22/02/2025</div>
+</header>
+
+<!-- HOME SCREEN -->
+<div id="screen-home" class="screen active">
+  <div class="hero">
+    <div class="hero-eyebrow">Knowledge Assessment</div>
+    <h2>Test Your<br><span>Judo Rules</span></h2>
+    <p>Choose a category to focus your study, or attempt a random mixed quiz. Every question links back to the relevant article for deeper revision.</p>
+
+    <div class="mode-selector" id="modeSelector">
+      <div class="mode-card random-card" onclick="startQuiz('random')">
+        <div class="mode-icon">&#127922;</div>
+        <h3>Random Mix</h3>
+        <div class="desc">20 questions drawn randomly from all articles</div>
+        <div class="count">All articles</div>
+      </div>
+      <div class="mode-card" onclick="startQuiz('scoring')">
+        <div class="mode-icon">&#127942;</div>
+        <h3>Scoring</h3>
+        <div class="desc">Ippon, Waza-ari, Yuko and Osaekomi rules</div>
+        <div class="count">Art.7, 14, 15, 16, 17</div>
+      </div>
+      <div class="mode-card" onclick="startQuiz('penalties')">
+        <div class="mode-icon">&#9888;</div>
+        <h3>Penalties</h3>
+        <div class="desc">Shido, hansoku-make, and prohibited acts</div>
+        <div class="count">Article 18</div>
+      </div>
+      <div class="mode-card" onclick="startQuiz('officials')">
+        <div class="mode-icon">&#128587;</div>
+        <h3>Officials &amp; Gestures</h3>
+        <div class="desc">Referees, judges, signals and procedures</div>
+        <div class="count">Art.1, 2, 3, 4</div>
+      </div>
+      <div class="mode-card" onclick="startQuiz('contest')">
+        <div class="mode-icon">&#9201;</div>
+        <h3>Contest Management</h3>
+        <div class="desc">Duration, start, end, golden score, injury</div>
+        <div class="count">Art.6, 9, 13, 19, 20</div>
+      </div>
+      <div class="mode-card" onclick="startQuiz('location')">
+        <div class="mode-icon">&#128208;</div>
+        <h3>Location &amp; Transitions</h3>
+        <div class="desc">Valid areas, ne-waza, tachi-waza rules</div>
+        <div class="count">Art.5, 10, 11, 12</div>
+      </div>
+      <div class="mode-card" onclick="startQuiz('equipment')">
+        <div class="mode-icon">&#128088;</div>
+        <h3>Equipment &amp; Judogi</h3>
+        <div class="desc">Judogi rules, field of play, hygiene</div>
+        <div class="count">App.1, 2, 3</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-wrap">
+    <div class="quiz-header">
+      <div>
+        <div class="quiz-category" id="quizCategoryLabel"></div>
+        <div class="quiz-meta" id="quizMeta"></div>
+      </div>
+      <button class="btn btn-ghost" onclick="goHome()">← Menu</button>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="score-display">
+      <div class="score-pill">Correct: <span id="scoreCorrect">0</span></div>
+      <div class="score-pill">Wrong: <span id="scoreWrong">0</span></div>
+    </div>
+    <div class="question-card">
+      <div class="question-ref" id="questionRef"></div>
+      <div class="question-text" id="questionText"></div>
+    </div>
+    <div class="options-grid" id="optionsGrid"></div>
+    <div class="explanation" id="explanation"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none">Next Question →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div id="screen-results" class="screen">
+  <div class="results-wrap">
+    <div class="results-ring" id="resultsRing">
+      <svg viewBox="0 0 160 160">
+        <circle class="ring-bg" cx="80" cy="80" r="68"/>
+        <circle class="ring-fill" id="ringFill" cx="80" cy="80" r="68"
+          stroke-dasharray="427.26"
+          stroke-dashoffset="427.26"/>
+      </svg>
+      <div class="results-pct" id="resultsPct">0%</div>
+      <div class="results-label">Score</div>
+    </div>
+    <div class="results-grade" id="resultsGrade"></div>
+    <div class="results-msg" id="resultsMsg"></div>
+    <div class="results-breakdown">
+      <div class="breakdown-item"><div class="breakdown-num" id="bdTotal">0</div><div class="breakdown-lbl">Questions</div></div>
+      <div class="breakdown-item"><div class="breakdown-num green" id="bdCorrect">0</div><div class="breakdown-lbl">Correct</div></div>
+      <div class="breakdown-item"><div class="breakdown-num red" id="bdWrong">0</div><div class="breakdown-lbl">Wrong</div></div>
+    </div>
+    <div class="btn-row" style="justify-content:center; margin-bottom:2rem;">
+      <button class="btn btn-primary" id="retryBtn" onclick="retryQuiz()">Retry Quiz</button>
+      <button class="btn btn-ghost" onclick="goHome()">← Change Category</button>
+    </div>
+    <div class="review-section" id="reviewSection"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+//  QUESTION BANK
+// ════════════════════════════════════════════════════════════════
+const QUESTIONS = [
+
+  // ARTICLE 1 – Referees and Officials
+  { cat: "Art.1 – Referees & Officials", ref: "Article 1",
+    q: "What must a referee hold to officiate at a BJA event?",
+    opts: ["An IJF international licence", "A BJA licence and refereeing award", "A national coaching certificate", "A senior black belt (3rd dan minimum)"],
+    a: 1, exp: "Referees must hold a BJA licence and a refereeing award to officiate at any BJA event." },
+
+  { cat: "Art.1 – Referees & Officials", ref: "Article 1",
+    q: "How many officials typically conduct a contest?",
+    opts: ["One referee only", "One referee and one judge", "One referee and two judges", "Two referees and one table judge"],
+    a: 2, exp: "The contest is generally conducted by one referee and two judges." },
+
+  { cat: "Art.1 – Referees & Officials", ref: "Article 1",
+    q: "Where are the two judges positioned during a contest?",
+    opts: ["On opposite corners of the tatami", "On the safety area at either end", "Seated at the technical table", "Standing beside the referee"],
+    a: 2, exp: "The two judges are seated at the technical table and connected to the referee by radio." },
+
+  // ARTICLE 2 – Position and Function of the Referee
+  { cat: "Art.2 – Referee Function", ref: "Article 2",
+    q: "Where should the athlete in the blue judogi be positioned relative to the referee?",
+    opts: ["To the right of the referee", "To the left of the referee", "Behind the referee", "It varies each contest"],
+    a: 1, exp: "The blue judogi athlete is to the LEFT of the referee; white is to the right." },
+
+  { cat: "Art.2 – Referee Function", ref: "Article 2",
+    q: "Where should the referee generally remain during a contest?",
+    opts: ["In the safety area at all times", "Within the contest area", "At the technical table", "Any position they choose"],
+    a: 1, exp: "The referee shall generally stay within the contest area." },
+
+  { cat: "Art.2 – Referee Function", ref: "Article 2",
+    q: "What should a referee do before starting a contest? (Select the INCORRECT option)",
+    opts: ["Check radio and headset are working", "Ensure tatami surface is clean with no gaps", "Confirm athletes' belt grades with the technical table", "Familiarise themselves with the audible end signal"],
+    a: 2, exp: "Confirming belt grades is not a pre-contest referee duty. The checks are: radio, tatami condition, end signal, spectator positions, and general order." },
+
+  // ARTICLE 3 – Judges
+  { cat: "Art.3 – Judges Function", ref: "Article 3",
+    q: "Under what rule do the referee and two judges operate?",
+    opts: ["Unanimous agreement rule", "Majority of three rule", "Referee's decision is final rule", "Two-out-of-three override rule"],
+    a: 1, exp: "All three officials operate under the 'majority of three' rule." },
+
+  { cat: "Art.3 – Judges Function", ref: "Article 3",
+    q: "If a judge notices the scoreboard is incorrect, what should they do?",
+    opts: ["Call mate and correct it themselves", "Draw the referee's attention to it", "Wait until the end of the contest", "Announce the correction to spectators"],
+    a: 1, exp: "The judge should draw the referee's attention so the error can be corrected." },
+
+  // ARTICLE 4 – Gestures
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "How does the referee signal Ippon?",
+    opts: ["Raises one arm sideways to shoulder height", "Raises one arm high above the head, palm facing forward", "Points with the forefinger towards the scoring athlete", "Extends both arms forward with hands closed"],
+    a: 1, exp: "Ippon: referee raises one arm HIGH above the head with the palm of the hand facing FORWARD." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "How is the Waza-ari gesture performed?",
+    opts: ["One arm raised above head", "One arm raised sideways to shoulder height, palm facing downward", "Both arms extended parallel to the tatami", "One arm at 45 degrees from the body"],
+    a: 1, exp: "Waza-ari: arm sideways to shoulder height, palm facing DOWNWARD. It starts with the arm across the chest." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "What is the Yuko gesture?",
+    opts: ["Arm raised above the head", "Arm sideways at shoulder height, palm down", "Arm raised sideways at 45 degrees from the body, palm down", "Both arms forward, hands closed"],
+    a: 2, exp: "Yuko: one arm sideways at 45 degrees from the body, palm facing downwards." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "How does the referee signal Toketa (hold broken)?",
+    opts: ["Both hands pressed on both athletes", "One arm raised, fingers straight forward, thumb up, waved right to left", "One arm raised high, palm forward", "A pointing finger at the escaping athlete"],
+    a: 1, exp: "Toketa: the referee raises one arm with fingers straight forward and thumb up, quickly waving it from right to left two or three times." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "What is the Non-combativity gesture?",
+    opts: ["Forefinger pointing at the penalised athlete", "Rotating forearms in a forward motion at chest height, then pointing with forefinger", "Extending both arms forward with closed hands, then downward action", "Crossing left hand over right at belt height"],
+    a: 1, exp: "Non-combativity: rotate forearms with a forward motion at chest height, then point with forefinger at the athlete to be penalised." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "For how long should scoring gestures be maintained?",
+    opts: ["One to two seconds", "Three to five seconds", "Five to ten seconds", "Until the next point is scored"],
+    a: 1, exp: "Gestures should be maintained for 3 to 5 seconds while moving to ensure judges and timekeepers can see clearly." },
+
+  // ARTICLE 5 – Location
+  { cat: "Art.5 – Location & Valid Areas", ref: "Article 5",
+    q: "When can ne-waza continue outside the contest area?",
+    opts: ["Never — mate must always be called", "Only if both athletes are entirely in the safety area", "If it was started inside the contest area and there is progression", "Only with referee permission"],
+    a: 2, exp: "Ne-waza (osaekomi, kansetsu-waza, shime-waza) initiated inside the contest area is valid and may continue outside if there is progression." },
+
+  { cat: "Art.5 – Location & Valid Areas", ref: "Article 5",
+    q: "A throw started inside the contest area carries both athletes outside. Up to how far into the safety area can the action remain valid?",
+    opts: ["One metre", "Two metres", "Three metres", "The full width of the safety area"],
+    a: 1, exp: "The action may be scored if the athletes are in the proximity of the limit of the contest area and no more than TWO METRES into the safety area." },
+
+  { cat: "Art.5 – Location & Valid Areas", ref: "Article 5",
+    q: "When can a new technique be applied when both athletes are outside the contest area?",
+    opts: ["At any time if it is a counter-technique", "Never — any new technique outside is not recognised", "Only in ne-waza", "Only if the referee has not called mate"],
+    a: 1, exp: "Any new technique applied when BOTH athletes are outside the contest area shall NOT be recognised." },
+
+  // ARTICLE 6 – Duration
+  { cat: "Art.6 – Duration", ref: "Article 6",
+    q: "What is the contest duration for Senior Men and Women at Level 4?",
+    opts: ["3 minutes real contest time", "4 minutes real contest time", "5 minutes real contest time", "6 minutes real contest time"],
+    a: 1, exp: "Senior Men and Women / Team contests are 4 minutes real contest time." },
+
+  { cat: "Art.6 – Duration", ref: "Article 6",
+    q: "What is the minimum rest period an athlete is entitled to between contests?",
+    opts: ["5 minutes", "10 minutes", "15 minutes", "No specified minimum"],
+    a: 1, exp: "Any athlete is entitled to a 10-minute rest between contests." },
+
+  // ARTICLE 7 – Osaekomi Time
+  { cat: "Art.7 – Osaekomi Times", ref: "Article 7",
+    q: "How long must osaekomi be held for Ippon?",
+    opts: ["10 seconds", "15 seconds", "20 seconds", "25 seconds"],
+    a: 2, exp: "Ippon requires 20 seconds of osaekomi." },
+
+  { cat: "Art.7 – Osaekomi Times", ref: "Article 7",
+    q: "What osaekomi duration results in Waza-ari?",
+    opts: ["5–9 seconds", "10–19 seconds", "20–29 seconds", "15–24 seconds"],
+    a: 1, exp: "Waza-ari is awarded for 10 seconds or more but less than 20 seconds (10–19 seconds)." },
+
+  { cat: "Art.7 – Osaekomi Times", ref: "Article 7",
+    q: "What osaekomi duration results in Yuko?",
+    opts: ["1–4 seconds", "5–9 seconds", "10–14 seconds", "3–9 seconds"],
+    a: 1, exp: "Yuko is awarded for 5 seconds or more but less than 10 seconds (5–9 seconds)." },
+
+  // ARTICLE 8 – Technique and Time Signal
+  { cat: "Art.8 – Technique & Time Signal", ref: "Article 8",
+    q: "A technique is started in the last second of contest time. Is it valid?",
+    opts: ["No — the time signal ends all scoring", "Yes — any immediate result of a technique started at the latest in the last second is valid", "Only if the referee calls hajime again", "Only if it results in ippon"],
+    a: 1, exp: "Any immediate result of a technique started at the very latest in the last second of contest time shall be valid." },
+
+  { cat: "Art.8 – Technique & Time Signal", ref: "Article 8",
+    q: "When osaekomi is announced simultaneously with the time signal, what happens?",
+    opts: ["The contest ends immediately with no score", "The osaekomi is cancelled", "Contest time is extended until a score or sore-made is announced", "The score at time of signal stands"],
+    a: 2, exp: "The time allotted is extended until ippon (or equivalence), yuko, waza-ari is announced, or toketa followed by sore-made." },
+
+  // ARTICLE 9 – Start of Contest
+  { cat: "Art.9 – Start of Contest", ref: "Article 9",
+    q: "Are athletes required to shake hands before the contest starts?",
+    opts: ["Yes, it is compulsory", "No, athletes must not shake hands before the contest", "Only in team competitions", "Only at senior level events"],
+    a: 1, exp: "Athletes must NOT shake hands before the start of the contest." },
+
+  { cat: "Art.9 – Start of Contest", ref: "Article 9",
+    q: "Which foot do athletes step forward with when the referee signals to begin?",
+    opts: ["Right foot", "Left foot", "Either foot", "Both feet simultaneously"],
+    a: 1, exp: "At the referee's signal, athletes move forward and bow, then take a step forward from the LEFT foot." },
+
+  { cat: "Art.9 – Start of Contest", ref: "Article 9",
+    q: "After the result is awarded, which foot do athletes step back with first?",
+    opts: ["Left foot", "Right foot", "Either foot", "They bow without stepping back"],
+    a: 1, exp: "After the result, athletes simultaneously take a step back from the RIGHT foot, then bow." },
+
+  // ARTICLE 10 – Ne-waza Transitions
+  { cat: "Art.10 – Tachi/Ne-waza Transition", ref: "Article 10",
+    q: "In which position is the kata-sankaku grip in tachi-waza (with a throwing action) considered?",
+    opts: ["Waza-ari", "Shido", "Hansoku-make", "No score"],
+    a: 2, exp: "A kata-sankaku grip in tachi-waza with a throwing action, with or without mate, will be considered HANSOKU-MAKE." },
+
+  { cat: "Art.10 – Tachi/Ne-waza Transition", ref: "Article 10",
+    q: "When is it considered ne-waza?",
+    opts: ["When one athlete has one knee on the floor", "When both athletes have two knees on the floor", "When one athlete is bent over", "Whenever gripping below the belt occurs"],
+    a: 1, exp: "Ne-waza is when BOTH athletes have TWO KNEES on the floor." },
+
+  { cat: "Art.10 – Tachi/Ne-waza Transition", ref: "Article 10",
+    q: "If an athlete pulls an opponent down into ne-waza illegally and the opponent does NOT take advantage, what happens?",
+    opts: ["Both athletes are penalised with shido", "The referee calls mate and penalises the infringing athlete with shido", "The referee awards the opponent a yuko", "Play continues until there is progression"],
+    a: 1, exp: "The referee announces mate and penalises with shido the athlete who illegally pulled the opponent into ne-waza." },
+
+  // ARTICLE 11 – Mate
+  { cat: "Art.11 – Mate", ref: "Article 11",
+    q: "What must happen to recommence the contest after mate?",
+    opts: ["The referee announces sono-mama", "The referee announces hajime", "The referee announces yoshi", "Athletes return to centre and the timer restarts automatically"],
+    a: 1, exp: "To recommence the contest after mate, the referee announces HAJIME." },
+
+  { cat: "Art.11 – Mate", ref: "Article 11",
+    q: "Should the referee call mate to prevent athletes going outside the contest area into the safety area (within 2m)?",
+    opts: ["Yes, always call mate when athletes approach the boundary", "No — mate should NOT be called just to stop athletes going outside (within 2m) unless dangerous", "Only in ne-waza", "Only in tachi-waza"],
+    a: 1, exp: "The referee shall NOT call mate just to stop athletes going outside (within proximity and ≤2m of safety area) unless the situation is considered dangerous." },
+
+  { cat: "Art.11 – Mate", ref: "Article 11",
+    q: "When should the referee call mate in ne-waza?",
+    opts: ["Any time an athlete's body touches the safety area", "When there is no evident progress", "After exactly 30 seconds of ne-waza", "Whenever either athlete requests it"],
+    a: 1, exp: "Mate is called in ne-waza when there is no evident progress." },
+
+  // ARTICLE 12 – Sono-mama
+  { cat: "Art.12 – Sono-mama", ref: "Article 12",
+    q: "In what situations can sono-mama be applied?",
+    opts: ["Any time the referee needs to stop the contest", "Only when athletes are working in ne-waza", "In both tachi-waza and ne-waza", "Only in golden score"],
+    a: 1, exp: "Sono-mama can ONLY be applied when athletes are working in ne-waza." },
+
+  { cat: "Art.12 – Sono-mama", ref: "Article 12",
+    q: "What does the referee announce to recommence after sono-mama?",
+    opts: ["Hajime", "Mate", "Yoshi", "Sore-made"],
+    a: 2, exp: "To recommence after sono-mama, the referee announces YOSHI." },
+
+  // ARTICLE 13 – End of Contest
+  { cat: "Art.13 – End of Contest", ref: "Article 13",
+    q: "Is there a time limit for golden score?",
+    opts: ["Yes — 4 minutes maximum", "Yes — same as regular contest time", "No — golden score has no time limit", "Yes — 2 minutes maximum"],
+    a: 2, exp: "There is NO time limit for golden score. It continues until a result is achieved." },
+
+  { cat: "Art.13 – End of Contest", ref: "Article 13",
+    q: "Are existing scores carried over into golden score?",
+    opts: ["No — golden score starts at zero", "Yes — all scores and shido from regular time carry over", "Only shido carry over, not technical scores", "Only technical scores carry over, not shido"],
+    a: 1, exp: "Any existing score(s) and/or numbers of shido from regular time ARE carried into the golden score period and remain on the scoreboard." },
+
+  { cat: "Art.13 – End of Contest", ref: "Article 13",
+    q: "In golden score, if osaekomi starts, after how many seconds does tori win with yuko?",
+    opts: ["After 10 seconds", "After 5 seconds", "After 20 seconds", "After 15 seconds"],
+    a: 1, exp: "In golden score, after 5 seconds of osaekomi, tori is awarded yuko and the contest ends. Referee announces 'Yuko! Sore-made!'" },
+
+  { cat: "Art.13 – End of Contest", ref: "Article 13",
+    q: "Under what circumstances does a contest continue into golden score?",
+    opts: ["When one athlete leads by only yuko", "When both athletes have no technical score, or equal scores, at the end of regular time", "After any direct hansoku-make", "Only when both athletes have two shido each"],
+    a: 1, exp: "When both athletes have no technical score, or equal technical scores at the end of regular contest time, the contest continues into golden score." },
+
+  // ARTICLE 14 – Ippon
+  { cat: "Art.14 – Ippon", ref: "Article 14",
+    q: "What are the four criteria for an ippon throw?",
+    opts: ["Speed, force, on the back, and skilfully controlled until end of landing", "Balance, power, direction, and control", "Technique, force, speed, and grip", "Landing angle, force, momentum, and technique name"],
+    a: 0, exp: "The four criteria for ippon are: SPEED, FORCE, ON THE BACK, and SKILFULLY CONTROLLED until the end of the landing." },
+
+  { cat: "Art.14 – Ippon", ref: "Article 14",
+    q: "If an athlete deliberately makes a 'bridge' (head and foot/feet on the tatami) after being thrown, what is awarded?",
+    opts: ["Waza-ari to the throwing athlete", "Ippon to the throwing athlete", "Shido to the bridging athlete", "No score — the throw is cancelled"],
+    a: 1, exp: "All situations where an athlete deliberately makes a bridge after being thrown are considered IPPON. This rule exists for athlete safety." },
+
+  { cat: "Art.14 – Ippon", ref: "Article 14",
+    q: "For what angle relative to the tatami must the shoulder-to-hip line land to be considered an ippon?",
+    opts: ["45 degrees or more", "Close to 90 degrees (i.e. on the back)", "Exactly 90 degrees only", "Any angle if the landing is forceful"],
+    a: 1, exp: "Looking at the line from shoulders to hips, both must be at an angle close to 90° to the tatami. Landing on the shoulder and upper back is considered a score." },
+
+  { cat: "Art.14 – Ippon", ref: "Article 14",
+    q: "How does an athlete signal submission during osaekomi, shime-waza or kansetsu-waza?",
+    opts: ["Shouting 'mate'", "Tapping twice or more with hand or foot, or saying 'maitta'", "Tapping once with the foot", "Verbally calling out to the referee"],
+    a: 1, exp: "An athlete gives up by tapping TWICE or more with hand or foot, or by saying 'maitta' (I give up)." },
+
+  // ARTICLE 15 – Waza-ari and Yuko
+  { cat: "Art.15 – Waza-ari & Yuko", ref: "Article 15",
+    q: "Do multiple yuko scores add up to waza-ari?",
+    opts: ["Yes — three yukos equal one waza-ari", "Yes — two yukos equal one waza-ari", "No — yukos are counted but do not add up to waza-ari", "Only in golden score"],
+    a: 2, exp: "Yuko scores are counted (1, 2, 3 etc.) but they do NOT add up to waza-ari." },
+
+  { cat: "Art.15 – Waza-ari & Yuko", ref: "Article 15",
+    q: "What constitutes a Waza-ari landing in tachi-waza?",
+    opts: ["Landing flat on the back with full force", "Landing more than 90° of the shoulder axis but NOT on the back; or lacking one of the four ippon criteria", "Landing on the side at exactly 90°", "Landing on the stomach"],
+    a: 1, exp: "Waza-ari: landing more than 90° of the shoulder axis but not on the back, OR when all four ippon criteria are not fully achieved." },
+
+  // ARTICLE 16 – Waza-ari-awasete-ippon
+  { cat: "Art.16 – Waza-ari-awasete-ippon", ref: "Article 16",
+    q: "How many waza-ari scores are needed to achieve waza-ari-awasete-ippon?",
+    opts: ["One", "Two", "Three", "Four"],
+    a: 1, exp: "Should an athlete gain a SECOND waza-ari, the referee announces waza-ari-awasete-ippon (two waza-ari score ippon)." },
+
+  // ARTICLE 17 – Osaekomi-waza
+  { cat: "Art.17 – Osaekomi-waza", ref: "Article 17",
+    q: "For osaekomi to be valid, which part of uke's body must be in contact with the tatami?",
+    opts: ["Any part of the body", "The full back or complete upper back (scapular region)", "Both shoulders and hips", "The chest and both elbows"],
+    a: 1, exp: "Uke must have their FULL BACK or COMPLETE UPPER BACK (scapular region) in contact with the tatami for osaekomi to be valid." },
+
+  { cat: "Art.17 – Osaekomi-waza", ref: "Article 17",
+    q: "Tori commits a shido infringement during osaekomi. The osaekomi time was 7 seconds. What happens?",
+    opts: ["Only the shido is awarded; no score", "The shido is awarded AND a waza-ari", "The shido is awarded AND a yuko", "The osaekomi is cancelled with no penalty"],
+    a: 2, exp: "5–9 seconds of osaekomi = YUKO. So the referee calls mate, awards the shido AND the yuko score, then resumes." },
+
+  { cat: "Art.17 – Osaekomi-waza", ref: "Article 17",
+    q: "Is it ever allowed to hold osaekomi-waza around the head or neck alone (without controlling an arm)?",
+    opts: ["Yes, if there is clear pressure", "Yes, but only in ne-waza", "No — control of at least one arm is always required", "Only if both legs are also controlled"],
+    a: 2, exp: "It is NEVER allowed to hold osaekomi-waza just around the head or neck without control of at least one arm." },
+
+  // ARTICLE 18 – Penalties
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "How many shido lead to hansoku-make?",
+    opts: ["Two shido", "Three shido", "Four shido", "One shido for serious infringements"],
+    a: 1, exp: "Two shido are given as warnings; the THIRD shido is hansoku-make." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "Do shido penalties give the opponent a technical score on the scoreboard?",
+    opts: ["Yes — each shido equals a yuko", "Yes — each shido equals a waza-ari", "No — only technical scores appear on the scoreboard; shido only count toward hansoku-make", "Only the third shido gives a score"],
+    a: 2, exp: "Shido do NOT give a score to the other athlete. Only technical scores (yuko, waza-ari, ippon) give points on the scoreboard." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What penalty is given for leg grabbing in tachi-waza?",
+    opts: ["Hansoku-make (direct disqualification)", "Shido", "Yuko to opponent", "Waza-ari to opponent"],
+    a: 1, exp: "Hooking the legs with the hand or arm, leg grabbing, and gripping the trousers is forbidden and penalised with SHIDO." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "Which techniques are permanently banned in ALL events?",
+    opts: ["Uchi-mata and harai-goshi", "Kawazu-gake, kani-basami, do-jime, and ashi-garami", "Seoi-nage and tomoe-nage", "Reverse seoi-nage and kata-sankaku"],
+    a: 1, exp: "Kawazu-gake, kani-basami, do-jime, and ashi-garami are Kodokan classified techniques NOT allowed in any events." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What is the penalty for 'ducking beneath the opponent's arm' without an immediate attack?",
+    opts: ["Hansoku-make", "Shido", "No penalty — it is a valid defensive move", "Yuko to the opponent"],
+    a: 1, exp: "Ducking beneath the opponent's arm without an immediate attack is penalised with SHIDO." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "In cadet (and BJA Level 1–3/Level 4 under 18) events, what happens if an athlete uses reverse seoi-nage?",
+    opts: ["Hansoku-make", "Shido", "No score and shido", "The score is given but a shido is also awarded"],
+    a: 2, exp: "For cadet / younger athletes, reverse seoi-nage results in NO SCORE and a SHIDO." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What is a 'false attack'?",
+    opts: ["Any failed throwing attempt", "An attack where tori has no intention to throw, or attacks without or immediately releases kumikata", "An attack from outside the contest area", "A defensive move disguised as an attack"],
+    a: 1, exp: "A false attack is defined as: tori has no intention of throwing, attacks without kumikata or immediately releases it, makes fake attacks without breaking uke's balance, or has no realistic possibility to throw." },
+
+  // ARTICLE 19 – Default and Withdrawal
+  { cat: "Art.19 – Default & Withdrawal", ref: "Article 19",
+    q: "How long does an athlete have to appear before fusen-gachi (forfeit) is awarded to their opponent?",
+    opts: ["10 seconds", "20 seconds", "30 seconds", "60 seconds"],
+    a: 2, exp: "A 30-second countdown begins. If the athlete is not present at the end of 30 seconds, fusen-gachi is awarded to the opponent." },
+
+  { cat: "Art.19 – Default & Withdrawal", ref: "Article 19",
+    q: "An athlete loses their contact lens during the contest and cannot recover it. They inform the referee they cannot continue. What is the result?",
+    opts: ["Fusen-gachi to the opponent", "Kiken-gachi to the opponent", "The contest is paused for 5 minutes", "The athlete forfeits the contest by ippon"],
+    a: 1, exp: "If an athlete cannot continue without their contact lens, the referee gives victory to their opponent by KIKEN-GACHI." },
+
+  // ARTICLE 20 – Injury
+  { cat: "Art.20 – Injury & Illness", ref: "Article 20",
+    q: "If the cause of an injury cannot be determined, who loses the contest?",
+    opts: ["The athlete who was attacking at the time", "The injured athlete", "Neither — the contest is replayed", "The referee decides by coin toss"],
+    a: 1, exp: "Where it is impossible to determine which athlete caused the injury, the athlete UNABLE TO CONTINUE shall lose the contest." },
+
+  { cat: "Art.20 – Injury & Illness", ref: "Article 20",
+    q: "How many times may the medic treat the same bleeding injury before the opponent wins by kiken-gachi?",
+    opts: ["Once", "Twice", "Three times", "As many times as needed"],
+    a: 1, exp: "The same bleeding injury may be treated TWICE. The third time the same injury recurs, the opponent wins by kiken-gachi." },
+
+  { cat: "Art.20 – Injury & Illness", ref: "Article 20",
+    q: "Is the coach allowed on the competition area (tatami) to assist an injured athlete?",
+    opts: ["Yes, at any time during injury treatment", "Yes, but only if accompanied by the referee", "No — the coach is never allowed on the competition area", "Only in team competitions"],
+    a: 2, exp: "The coach is NEVER allowed on the competition area of the tatami." },
+
+  { cat: "Art.20 – Injury & Illness", ref: "Article 20",
+    q: "An athlete vomits during the contest. What is the result?",
+    opts: ["The contest is paused and cleaned up; it then resumes", "The athlete loses by kiken-gachi", "Both athletes return to start positions", "The athlete receives a shido then the contest continues"],
+    a: 1, exp: "Any type of vomiting by an athlete shall result in kiken-gachi for the OTHER athlete." },
+
+  // APPENDIX 1 – Field of Play
+  { cat: "App.1 – Field of Play", ref: "Appendix 1",
+    q: "What is the minimum contest area size for IJF events?",
+    opts: ["6m × 6m", "7m × 7m", "8m × 8m", "10m × 10m"],
+    a: 2, exp: "The contest area for IJF events shall be a minimum of 8m × 8m and a maximum of 10m × 10m." },
+
+  { cat: "App.1 – Field of Play", ref: "Appendix 1",
+    q: "What is the minimum safety area width?",
+    opts: ["1 metre", "2 metres", "3 metres", "4 metres"],
+    a: 2, exp: "The safety area shall be a minimum of 3 metres." },
+
+  // APPENDIX 2 – Judogi
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "Which side of the jacket must be crossed over the other?",
+    opts: ["Right side over left", "Left side over right", "Either — the athlete decides", "Blue athlete left, white athlete right"],
+    a: 1, exp: "The jacket must be worn with the LEFT side crossed over the RIGHT." },
+
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "What additional item must female competitors wear?",
+    opts: ["A blue sports bra", "A white T-shirt with a round neck", "A black vest under the jacket", "No additional item is required"],
+    a: 1, exp: "Female competitors shall also wear a WHITE T-SHIRT with a round neck." },
+
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "What is the maximum belt tip length from the central knot?",
+    opts: ["15 cm", "20 cm", "25 cm", "30 cm"],
+    a: 3, exp: "The tips starting from the central knot must have a length between 20 and 30 cm." },
+
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "What is the maximum size of the manufacturer's logo on the jacket?",
+    opts: ["9 cm²", "20 cm²", "30 cm²", "50 cm²"],
+    a: 2, exp: "Only one manufacturer's logo per clothing item is allowed; it must be a maximum of 30 cm² on the jacket and trousers." },
+
+  // APPENDIX 5 – Masters
+  { cat: "App.5 – Masters", ref: "Appendix 5",
+    q: "What is the contest duration for M1/F1 to M6/F6 Masters?",
+    opts: ["2 minutes", "2.5 minutes", "3 minutes", "4 minutes"],
+    a: 2, exp: "Masters M1/F1 to M6/F6 have THREE minutes contest duration with unlimited golden score." },
+
+  { cat: "App.5 – Masters", ref: "Appendix 5",
+    q: "Is shime-waza permitted in Masters categories exclusively for athletes aged 60 and over?",
+    opts: ["Yes, with no restriction", "Yes, but only if both athletes agree", "No — it is prohibited and will result in hansoku-make", "No — only a shido is given"],
+    a: 2, exp: "Shime-waza is not permitted in categories exclusively for 60+ athletes. The penalty is hansoku-make and the athlete cannot continue in that category." },
+
+
+  // ── ARTICLE 1 – extra ──
+  { cat: "Art.1 – Referees & Officials", ref: "Article 1",
+    q: "Who allocates referees to each tatami at a BJA event?",
+    opts: ["The tournament director", "The referee in charge", "The senior referee on the day", "The IJF delegate"],
+    a: 1, exp: "Referees are allocated to each tatami by the REFEREE IN CHARGE." },
+
+  { cat: "Art.1 – Referees & Officials", ref: "Article 1",
+    q: "Who is responsible for selecting referees for finals?",
+    opts: ["The tournament director", "The IJF technical delegate", "The referee in charge", "A vote among senior referees"],
+    a: 2, exp: "The selection of referees for finals is at the discretion of the REFEREE IN CHARGE." },
+
+  { cat: "Art.1 – Referees & Officials", ref: "Article 1",
+    q: "What system may the judges at the technical table have access to?",
+    opts: ["The SCORE system", "The CARE system", "The VIDEO system", "The REVIEW system"],
+    a: 1, exp: "The judges may have access to a CARE system at the technical table." },
+
+  // ── ARTICLE 2 – extra ──
+  { cat: "Art.2 – Referee Function", ref: "Article 2",
+    q: "In exceptional circumstances, where may the referee observe the action from during ne-waza?",
+    opts: ["The technical table", "The safety area", "The edge of the contest area", "An elevated platform"],
+    a: 1, exp: "In exceptional cases (e.g. both athletes in ne-waza facing outwards), the referee may observe from the SAFETY AREA." },
+
+  { cat: "Art.2 – Referee Function", ref: "Article 2",
+    q: "What should the referee do during presentations or lengthy programme delays?",
+    opts: ["Stand at the edge of the contest area", "Leave the competition area", "Remain in the centre of the tatami", "Hand control to the judges"],
+    a: 1, exp: "The referee should LEAVE the competition area during presentations or any lengthy delay in the programme." },
+
+  // ── ARTICLE 3 – extra ──
+  { cat: "Art.3 – Judges Function", ref: "Article 3",
+    q: "If an athlete needs to temporarily leave the competition area and the judges are not the same gender, who must accompany them?",
+    opts: ["The referee", "A judge of matching gender", "An official designated by the referee in charge", "Their coach"],
+    a: 2, exp: "If judges are not of the same gender, an OFFICIAL DESIGNATED BY THE REFEREE IN CHARGE shall accompany the athlete." },
+
+  // ── ARTICLE 4 – extra ──
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "How does the referee signal Osaekomi?",
+    opts: ["Raises both arms above the head", "Bends toward the athletes and points one arm downward, palm facing down", "Waves one arm from right to left", "Points with the forefinger at the controlling athlete"],
+    a: 1, exp: "Osaekomi: the referee bends toward the athletes and points an arm with palm facing DOWNWARD. They must check the timekeeper has started the timer." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "What is the gesture to cancel an expressed opinion (score or penalty)?",
+    opts: ["Two hands pressed on both athletes", "Raise one hand above the head and wave it right to left while repeating the original gesture with the other hand", "Both arms extended forward then pulled back", "Point at the scoreboard with both hands"],
+    a: 1, exp: "To cancel: repeat the original gesture with one hand while raising the other hand above the head and waving it from right to left. No announcement should be made." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "How does the referee direct an athlete to re-adjust their judogi?",
+    opts: ["Points at the athlete with both forefingers", "Crosses left hand over right, palms facing inwards, at belt height", "Extends both arms forward with open palms", "Waves both hands downward"],
+    a: 1, exp: "To direct adjustment of judogi: cross left hand over right, palms facing inwards, at BELT HEIGHT." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "When awarding a penalty in tachi-waza, what does the referee do before pointing at the offending athlete?",
+    opts: ["Announces sono-mama first", "Stops the contest with mate and returns athletes to starting positions", "Consults the judges by radio", "Awards the score to the opponent first"],
+    a: 1, exp: "In tachi-waza, the referee stops the contest with MATE, returns athletes to their starting positions, then turns 45 degrees toward the athlete to be penalised." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "What is the False Attack gesture?",
+    opts: ["Rotating forearms forward at chest height", "Both arms extended forward with hands closed, then a downward action with both hands", "One arm raised sideways at 45 degrees", "Forefinger pointing at the athlete"],
+    a: 1, exp: "False attack: extend both arms forward with hands CLOSED, then make a downward action with both hands." },
+
+  { cat: "Art.4 – Gestures", ref: "Article 4",
+    q: "How does the referee call the medic?",
+    opts: ["Blows a whistle twice", "Faces the medical table and waves an arm (palm upwards) from the direction of the medical table toward the injured athlete", "Crosses both arms above the head", "Points repeatedly at the injured athlete"],
+    a: 1, exp: "To call the medic: face the medical table and wave an arm (PALM UPWARDS) from the direction of the medical table towards the injured athlete." },
+
+  // ── ARTICLE 5 – extra ──
+  { cat: "Art.5 – Location & Valid Areas", ref: "Article 5",
+    q: "If ne-waza outside the contest area goes beyond the limit of the safety area, what must the referee call?",
+    opts: ["Mate and assign the osaekomi score", "Toketa", "Ippon, sore-made", "Sono-mama"],
+    a: 2, exp: "If the osaekomi-waza action outside the contest area goes beyond the limit of the safety area the referee must call IPPON, SORE-MADE." },
+
+  { cat: "Art.5 – Location & Valid Areas", ref: "Article 5",
+    q: "Can an athlete leave the competition area during a contest?",
+    opts: ["Never under any circumstances", "Yes, with permission from the referee in exceptional cases (e.g. damaged judogi, medical attention)", "Yes, whenever they choose", "Only in team competitions"],
+    a: 1, exp: "Once the contest has started, an athlete may leave with REFEREE PERMISSION, e.g. to change a damaged judogi or for medical attention, and must be accompanied by a judge." },
+
+  // ── ARTICLE 6 – extra ──
+  { cat: "Art.6 – Duration", ref: "Article 6",
+    q: "What is the contest duration for Cadet under 18 at Level 4?",
+    opts: ["2 minutes", "3 minutes", "4 minutes", "5 minutes"],
+    a: 2, exp: "Cadet under 18 Men and Women / Team contests are also 4 minutes real contest time at Level 4." },
+
+  // ── ARTICLE 8 – extra ──
+  { cat: "Art.8 – Technique & Time Signal", ref: "Article 8",
+    q: "A throwing technique is applied simultaneously with the time signal, but the referee and judges decide it will not be immediately effective. What happens?",
+    opts: ["The technique is scored as waza-ari", "The referee announces sore-made with no scoring value", "Golden score begins immediately", "The technique is reviewed by the CARE system"],
+    a: 1, exp: "If the referees decide the simultaneous technique will not be immediately effective, the referee announces SORE-MADE with no scoring value." },
+
+  // ── ARTICLE 9 – extra ──
+  { cat: "Art.9 – Start of Contest", ref: "Article 9",
+    q: "Is it compulsory for athletes to bow when entering or leaving the contest area?",
+    opts: ["Yes, it is compulsory and the referee must enforce it", "No, athletes are free to bow but it is not compulsory", "Only in team competitions", "Only when entering, not leaving"],
+    a: 1, exp: "Athletes are FREE to bow when entering or leaving the contest area, although it is NOT COMPULSORY." },
+
+  { cat: "Art.9 – Start of Contest", ref: "Article 9",
+    q: "Where must athletes be wearing their belt when the contest starts?",
+    opts: ["Below the hip bone", "Above the hip bone, tied tightly", "At navel height", "There is no specific rule on belt position"],
+    a: 1, exp: "Athletes must wear their judogi correctly with the belt tied tightly ABOVE THEIR HIP BONE before the referee announces hajime." },
+
+  { cat: "Art.9 – Start of Contest", ref: "Article 9",
+    q: "What happens if athletes do not bow correctly?",
+    opts: ["A shido is given immediately", "The referee directs the athletes to do so", "The contest is delayed until they comply", "The referee in charge is called"],
+    a: 1, exp: "If athletes do not bow or do so incorrectly, the REFEREE SHALL DIRECT them to do so. It is very important to perform the bow in the correct way." },
+
+  { cat: "Art.9 – Start of Contest", ref: "Article 9",
+    q: "What happens if an object falls onto the tatami during a contest?",
+    opts: ["Play stops automatically", "The nearest athlete removes it", "It is collected by or handed to the referee, who decides with the judges on the texture of the object", "The technical officials retrieve it"],
+    a: 2, exp: "Objects falling onto the tatami must be collected by or handed to the REFEREE, who decides together with the judges on the texture of the object." },
+
+  // ── ARTICLE 10 – extra ──
+  { cat: "Art.10 – Tachi/Ne-waza Transition", ref: "Article 10",
+    q: "An athlete has two elbows and two knees on the floor. What can their opponent do?",
+    opts: ["Apply a throwing technique for a score", "Only apply ne-waza techniques", "Apply a technique to transition into ne-waza, but without any throwing score", "Nothing — mate must be called immediately"],
+    a: 2, exp: "If an athlete has two elbows and two knees on the floor, the opponent can do a technique but ONLY to transition into ne-waza, WITHOUT any throwing score." },
+
+  { cat: "Art.10 – Tachi/Ne-waza Transition", ref: "Article 10",
+    q: "Is gripping under the belt allowed during the end phase of a throwing technique?",
+    opts: ["Never — it is always a shido", "Yes, it is allowed during the end phase of a throwing technique", "Only in senior competition", "Only if the throw is completed within 3 seconds"],
+    a: 1, exp: "Gripping under the belt in the END PHASE of a throwing technique is ALLOWED." },
+
+  { cat: "Art.10 – Tachi/Ne-waza Transition", ref: "Article 10",
+    q: "In the kata-sankaku grip situation in ne-waza, what is prohibited?",
+    opts: ["Gripping both the neck and one shoulder", "Blocking the opponent's body with the legs", "Using the grip to transition to tachi-waza", "Applying pressure to the neck"],
+    a: 1, exp: "In kata-sankaku ne-waza, it is PROHIBITED to block the opponent's body with the legs. This is hansoku-make." },
+
+  // ── ARTICLE 11 – extra ──
+  { cat: "Art.11 – Mate", ref: "Article 11",
+    q: "When is mate called if an athlete regains standing position from ne-waza bearing their opponent on their back?",
+    opts: ["Only if both hands are on the tatami", "When the hands are completely clear of the tatami and the opponent cannot progress the action", "As soon as they begin to rise", "Only if they move outside the contest area"],
+    a: 1, exp: "Mate is called when an athlete regains standing from ne-waza bearing their opponent on their back, with HANDS COMPLETELY CLEAR of the tatami and no possibility of progression for the opponent." },
+
+  { cat: "Art.11 – Mate", ref: "Article 11",
+    q: "When must mate be called if an athlete applies kansetsu-waza or shime-waza from a standing position?",
+    opts: ["After 5 seconds", "Immediately", "Only if the opponent taps out", "Only if the technique is effective"],
+    a: 1, exp: "Mate must be called IMMEDIATELY when an athlete performs or attempts kansetsu-waza or shime-waza from a standing position." },
+
+  { cat: "Art.11 – Mate", ref: "Article 11",
+    q: "An athlete escapes from osaekomi and appears to need a rest. Should the referee call mate?",
+    opts: ["Yes, to allow recovery time", "Yes, if the athlete signals they need a break", "No — mate should NOT be called simply because an athlete appears to need rest after escaping", "Only if medical attention is required"],
+    a: 2, exp: "The referee shall NOT call mate when an athlete who has escaped from osaekomi, shime-waza or kansetsu-waza appears in need of or calls for a rest." },
+
+  // ── ARTICLE 13 – extra ──
+  { cat: "Art.13 – End of Contest", ref: "Article 13",
+    q: "Can a contest be decided by shido alone (without reaching hansoku-make)?",
+    opts: ["Yes — the athlete with fewer shido wins", "No — a contest cannot be decided by single or accumulated shido until hansoku-make is reached", "Yes — in golden score only", "Yes — if both athletes have the same technical score"],
+    a: 1, exp: "A contest CANNOT be decided by single or accumulated shido until hansoku-make is reached. Only technical scores decide the winner directly." },
+
+  { cat: "Art.13 – End of Contest", ref: "Article 13",
+    q: "After indicating the result, what must athletes do before leaving the contest area?",
+    opts: ["Remove their belt and shake hands", "Take one step back, bow, and leave by the sides around the safety area wearing judogi properly", "Run to their coach for instructions", "Wait for the referee to leave first"],
+    a: 1, exp: "Athletes take one step back, bow to each other, and leave by the sides of the mat around the safety area. They must be wearing judogi properly and must not remove any part before leaving." },
+
+  { cat: "Art.13 – End of Contest", ref: "Article 13",
+    q: "What happens if the referee awards victory to the wrong athlete?",
+    opts: ["The decision is final and cannot be changed", "The judges must ensure the referee corrects the error before leaving the competition area; otherwise the referee in charge can intervene", "Only the referee in charge can change it, and only within 30 seconds", "It can be appealed by the coach within 1 minute"],
+    a: 1, exp: "If the referee awards victory to the wrong athlete in error, the JUDGES must ensure the referee corrects this before leaving the competition area. If not, the REFEREE IN CHARGE can intervene." },
+
+  { cat: "Art.13 – End of Contest", ref: "Article 13",
+    q: "In golden score, if both athletes score simultaneously, what does the referee do?",
+    opts: ["The athlete who scored first wins", "The referee announces mate and the contest continues without considering those actions for scoring", "The athlete with the higher existing score wins", "The referee in charge decides the winner"],
+    a: 1, exp: "If both athletes score simultaneously in golden score, the referee announces MATE and the contest continues without those actions being scored." },
+
+  // ── ARTICLE 14 – extra ──
+  { cat: "Art.14 – Ippon", ref: "Article 14",
+    q: "What must be identified for rolling to be considered ippon?",
+    opts: ["Any landing on the back", "A rolling action with no break during landing where uke rolls onto their back", "A technique of the athlete's own invention", "Any throw resulting in a back landing, regardless of technique"],
+    a: 1, exp: "Rolling can be considered ippon only if there is NO BREAK during landing. It is ippon when uke rolls on their back. A Kodokan classified technique must be identifiable." },
+
+  { cat: "Art.14 – Ippon", ref: "Article 14",
+    q: "When both athletes appear to attack simultaneously and referees cannot decide which technique dominated, what is awarded?",
+    opts: ["Waza-ari to both athletes", "Ippon to the attacking athlete", "No score", "Golden score to decide"],
+    a: 2, exp: "Simultaneous techniques where referees cannot decide which dominated: NO SCORE is awarded." },
+
+  // ── ARTICLE 15 – extra ──
+  { cat: "Art.15 – Waza-ari & Yuko", ref: "Article 15",
+    q: "Landing on both buttocks 90 degrees or more to the rear — what is the result for tori?",
+    opts: ["Ippon", "Waza-ari", "Yuko and no shido for uke", "No score"],
+    a: 2, exp: "Landing on both buttocks 90 degrees or more to the rear results in YUKO for tori and no shido for uke." },
+
+  { cat: "Art.15 – Waza-ari & Yuko", ref: "Article 15",
+    q: "If a landing is on one hand and one buttock, is yuko awarded even if the shoulder axis is at 90 degrees?",
+    opts: ["Yes, if the shoulder axis qualifies", "No — yuko will NOT be awarded if the landing is on one hand and one buttock", "It depends on the speed and force of the throw", "Only if a technique is clearly identifiable"],
+    a: 1, exp: "Yuko will NOT be awarded, even if the shoulder axis is 90 degrees or close, if the landing is on ONE HAND AND ONE BUTTOCK." },
+
+  // ── ARTICLE 17 – extra ──
+  { cat: "Art.17 – Osaekomi-waza", ref: "Article 17",
+    q: "If tori changes from one osaekomi-waza to another without losing control, what happens to the osaekomi time?",
+    opts: ["The timer resets to zero", "The timer pauses until the new hold is established", "The osaekomi time continues uninterrupted", "Toketa is called and the time stops"],
+    a: 2, exp: "Should tori change osaekomi technique WITHOUT LOSING CONTROL, the osaekomi time CONTINUES until ippon, toketa, or mate." },
+
+  { cat: "Art.17 – Osaekomi-waza", ref: "Article 17",
+    q: "Uke commits an infringement during osaekomi. How does the referee award the penalty?",
+    opts: ["Calls sono-mama, then mate, then awards the penalty", "Awards the penalty directly by pointing at uke without interrupting the contest", "Calls mate immediately to award the penalty", "Calls toketa then awards the penalty"],
+    a: 1, exp: "When UKE commits an infringement during osaekomi, the referee awards the penalty DIRECTLY by pointing at uke WITHOUT interrupting the contest." },
+
+  { cat: "Art.17 – Osaekomi-waza", ref: "Article 17",
+    q: "If both table judges agree osaekomi exists but the referee has not announced it, what must happen?",
+    opts: ["The judges wait for the referee to notice", "The judges must inform the referee, who announces osaekomi immediately", "The score is awarded at the end of the contest", "Sono-mama is called while the judges consult"],
+    a: 1, exp: "If both table judges agree osaekomi exists but the referee has not announced it, the judges MUST INFORM the referee, who shall announce osaekomi IMMEDIATELY." },
+
+  // ── ARTICLE 18 – extra ──
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What happens when both athletes each already have two shido and both receive a further penalty?",
+    opts: ["The athlete who committed the later infringement loses", "Both athletes are given hansoku-make", "One more shido is given to each before hansoku-make", "The referee in charge decides"],
+    a: 1, exp: "When BOTH athletes have two shido and each receives a further penalty, BOTH are given hansoku-make." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "Is it allowed to grip inside the sleeve in ne-waza?",
+    opts: ["No, never", "Yes, gripping inside the sleeve is allowed in ne-waza for both tori and uke", "Only for tori, not uke", "Only if the referee gives permission"],
+    a: 1, exp: "In ne-waza it is ALLOWED to grip inside the sleeve or the bottom of the trouser leg for both tori and uke." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What is the rule on breaking an opponent's grip?",
+    opts: ["Breaking grips is never allowed", "Breaking a grip is allowed only if tori keeps at least one grip themselves", "Grips can be broken freely with no restriction", "Grips can only be broken with one hand"],
+    a: 1, exp: "Breaking grips with one or two hands is allowed IF the athlete keeps at least one grip. Breaking grips and ending with NO grip is shido." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "Can a penalty be awarded after sore-made has been announced?",
+    opts: ["Never — sore-made ends all decisions", "Yes — a penalty can be awarded after sore-made for prohibited acts done during the contest time or serious acts done after the signal", "Only if the referee in charge requests it", "Only if it is a direct hansoku-make"],
+    a: 1, exp: "A penalty CAN be awarded after sore-made for any prohibited act done during the time allotted, or in exceptional situations for serious acts done after the end signal." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What is required before a direct hansoku-make is awarded?",
+    opts: ["The referee alone can award it at any time", "All three officials (referee and both judges) should agree; if two strongly agree and one disagrees, the referee in charge is called", "The referee in charge must always be consulted", "The athlete must have already received two shido"],
+    a: 1, exp: "The referee and BOTH JUDGES should all agree before awarding a direct hansoku-make. If two of three strongly agree and one disagrees, the REFEREE IN CHARGE gives the final decision." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What happens if an athlete intentionally goes outside the contest area in tachi-waza without an attack engaged?",
+    opts: ["Hansoku-make", "Shido", "Waza-ari to the opponent", "No penalty — it is a valid defensive tactic"],
+    a: 1, exp: "Without a valid attack engaged, intentionally going outside the contest area in tachi-waza is penalised with SHIDO." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "Is a bear hug in tachi-waza allowed?",
+    opts: ["No — it is always hansoku-make", "Yes, but it is shido if both hands clasp together to form a circle", "Yes, with no restriction", "No — it is always shido"],
+    a: 1, exp: "Bear hug in tachi-waza is ALLOWED but will be penalised with shido if tori clasps both hands together to form a circle, or if tori's hands clasp the opposite arm to form a circle." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What is the time limit allowed after kumikata is established before an attack must be made?",
+    opts: ["10 seconds", "20 seconds", "30 seconds if there is positive progression", "60 seconds"],
+    a: 2, exp: "After conventional kumikata is established, the athlete has 30 SECONDS (with positive progression) before they must make an attacking move." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "What constitutes 'normal kumikata'?",
+    opts: ["Any grip above the belt", "Right hand on opponent's right side judogi and left hand on opponent's left side, both above the belt (or vice versa)", "One sleeve grip and one belt grip", "Any grip that the referee considers positive"],
+    a: 1, exp: "Normal kumikata: left hand on right side of opponent's judogi (sleeve, collar, chest, shoulder or back), right hand on left side, ALWAYS ABOVE THE BELT — or vice versa." },
+
+  { cat: "Art.18 – Penalties", ref: "Article 18",
+    q: "Which of the following is a shido for an 'illegal move' rather than 'lack of combativity'?",
+    opts: ["Adopting an excessively defensive posture", "Bending back the opponent's fingers to break their grip", "Making a false attack", "Pulling the opponent down to ne-waza illegally"],
+    a: 1, exp: "Bending back the opponent's fingers to break their grip (Rule 14) is an ILLEGAL MOVE shido. The others listed are lack of combativity shidos." },
+
+  // ── ARTICLE 19 – extra ──
+  { cat: "Art.19 – Default & Withdrawal", ref: "Article 19",
+    q: "Can an athlete who forfeits a match participate in the repechage?",
+    opts: ["Never", "Yes, automatically", "Yes, provided the referee in charge and/or tournament director find certain criteria are fulfilled", "Only if they withdrew due to injury"],
+    a: 2, exp: "An athlete forfeiting a match MAY participate in the repechage provided the REFEREE IN CHARGE AND/OR TOURNAMENT DIRECTOR find that certain criteria are fulfilled." },
+
+  { cat: "Art.19 – Default & Withdrawal", ref: "Article 19",
+    q: "What is the difference between fusen-gachi and kiken-gachi?",
+    opts: ["They mean the same thing", "Fusen-gachi is awarded when the opponent does not appear before the contest; kiken-gachi is awarded when the opponent withdraws during the contest", "Fusen-gachi is for injury; kiken-gachi is for non-appearance", "Kiken-gachi is for non-appearance; fusen-gachi is for withdrawal during the contest"],
+    a: 1, exp: "FUSEN-GACHI is awarded when the opponent does not appear for the contest. KIKEN-GACHI is awarded when the opponent withdraws DURING the contest." },
+
+  // ── ARTICLE 20 – extra ──
+  { cat: "Art.20 – Injury & Illness", ref: "Article 20",
+    q: "How many times may the same dislocated finger be reset during a contest before the athlete cannot continue?",
+    opts: ["Once", "Twice — the third dislocation ends the contest", "Three times", "As many times as needed"],
+    a: 1, exp: "The same finger may be reset on TWO occasions. If the same dislocation occurs a THIRD time, the athlete cannot continue and the opponent wins by kiken-gachi." },
+
+  { cat: "Art.20 – Injury & Illness", ref: "Article 20",
+    q: "Where should minor injury treatment take place?",
+    opts: ["On the tatami where the injury occurred", "Outside the competition area, near the area or close to the medical facility, with a judge present", "At the medical room only", "Wherever the medic decides"],
+    a: 1, exp: "Medical assistance for minor injuries should be OUTSIDE the competition area, close to the medical table, with the injured athlete accompanied by one of the judges." },
+
+  { cat: "Art.20 – Injury & Illness", ref: "Article 20",
+    q: "What should the referee do if an injured athlete requires prolonged treatment on the tatami?",
+    opts: ["Stay beside the athlete throughout", "Declare the non-injured opponent as the winner, who then leaves; the referee remains on the tatami until the athlete is safely transported away", "Call the tournament director immediately", "Suspend the contest for up to 10 minutes"],
+    a: 1, exp: "The non-injured opponent is declared WINNER and leaves. The referee must STAY ON THE TATAMI observing until the injured athlete is safely transported away. The referee is the LAST to leave." },
+
+  { cat: "Art.20 – Injury & Illness", ref: "Article 20",
+    q: "How does the medic signal an emergency intervention request to the referee?",
+    opts: ["By blowing a whistle", "By standing at the edge of the competition surface with two arms crossed at chest height", "By calling out loudly to the referee", "By waving both arms above their head"],
+    a: 1, exp: "To make an emergency intervention request, the medic stands at the edge of the competition surface showing TWO ARMS CROSSED AT CHEST HEIGHT. The referee must then stop the contest." },
+
+  // ── APPENDIX 1 – extra ──
+  { cat: "App.1 – Field of Play", ref: "Appendix 1",
+    q: "What is the minimum free zone that must be maintained around the entire competition area?",
+    opts: ["25 cm", "50 cm", "1 metre", "2 metres"],
+    a: 1, exp: "A FREE ZONE of 50 cm minimum must be maintained around the entire competition area." },
+
+  { cat: "App.1 – Field of Play", ref: "Appendix 1",
+    q: "What are the official IJF tatami colours?",
+    opts: ["Blue and white", "Red and white", "Yellow (123C) and red (1795C)", "Green and blue"],
+    a: 2, exp: "The official IJF tatami colours are YELLOW (123C) and RED (1795C)." },
+
+  { cat: "App.1 – Field of Play", ref: "Appendix 1",
+    q: "Where can decorations (e.g. host city logos) be placed on the tatami?",
+    opts: ["Anywhere on the tatami surface", "Only on the contest area", "Only on the safety area, never on the contest area", "On the border between contest and safety areas"],
+    a: 2, exp: "Any decoration on the tatami can only be placed on the SAFETY AREA, never on the contest area, and must not be slippery." },
+
+  // ── APPENDIX 2 – extra ──
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "What is the minimum width of the jacket lapel?",
+    opts: ["2 cm", "3 cm", "4 cm", "5 cm"],
+    a: 2, exp: "The width of the lapel side must be 4 cm." },
+
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "What is the maximum vertical distance allowed between the top of the breastbone and the point where the jacket lapels cross?",
+    opts: ["5 cm", "10 cm", "15 cm", "20 cm"],
+    a: 1, exp: "The distance between the sternum top and the lapel crossing point of the jacket vertically must be LESS THAN 10 cm." },
+
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "Can athletes wear tights under their judogi trousers?",
+    opts: ["Yes, any length", "Yes, but only to knee length", "No — tights are forbidden", "Only female athletes may wear tights"],
+    a: 2, exp: "It is FORBIDDEN to wear tights. Athletes can wear underwear or shorts from waist to knee length (below belt level)." },
+
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "What is the maximum size for the national emblem on the judogi jacket?",
+    opts: ["30 cm2", "50 cm2", "100 cm2", "150 cm2"],
+    a: 2, exp: "The national emblem on the left chest side of the jacket has a maximum surface area of 100 cm2." },
+
+  { cat: "App.2 – Judogi", ref: "Appendix 2",
+    q: "On which side of the jacket is the advertisement space reserved for the individual athlete?",
+    opts: ["Left-hand side lapel only", "Right-hand side lapel only", "On either sleeve", "On the back of the jacket"],
+    a: 1, exp: "The advertisement space reserved for the athlete is on the RIGHT-HAND SIDE LAPEL ONLY, maximum 10 cm x 5 cm." },
+
+  // ── APPENDIX 3 – Hygiene ──
+  { cat: "App.2 – Judogi", ref: "Appendix 3",
+    q: "What type of hair tie must athletes use?",
+    opts: ["Any hair tie available", "A metal clip or pin", "A hair band made of rubber or similar material, with no rigid or metal components", "A fabric ribbon tied in a bow"],
+    a: 2, exp: "Hair must be tied with a HAIR BAND MADE OF RUBBER OR SIMILAR MATERIAL, void of any rigid or metal components." },
+
+  // ── APPENDIX 4 – Coaches ──
+  { cat: "Art.1 – Referees & Officials", ref: "Appendix 4",
+    q: "When during a contest may a coach give instructions to their athlete?",
+    opts: ["At any time throughout the contest", "Only during the pause after mate, not once hajime is called", "Only before the contest begins", "Continuously but only in a quiet voice"],
+    a: 1, exp: "Coaching is permitted ONLY DURING THE PAUSE (after mate). Once the contest resumes with hajime, coaches must keep silent." },
+
+  { cat: "Art.1 – Referees & Officials", ref: "Appendix 4",
+    q: "Where must the coach be seated during a contest?",
+    opts: ["Anywhere along the safety area", "On the designated coach's chair for that tatami throughout the contest", "Behind the technical table", "They may stand or sit as they prefer"],
+    a: 1, exp: "The coach must remain SEATED ON THE CHAIR provided for each tatami THROUGHOUT the contest." },
+
+  { cat: "Art.1 – Referees & Officials", ref: "Appendix 4",
+    q: "What happens on a coach's second warning for misconduct?",
+    opts: ["They are expelled from the venue", "They are fined", "They must move from the mat-side chair to the public seating for the rest of the day and cannot coach from there", "They receive a first formal warning only"],
+    a: 2, exp: "On the SECOND WARNING, the coach moves from the mat-side chair to the PUBLIC SEATING for the rest of the day. They cannot coach from the public seating." },
+
+  // ── APPENDIX 5 – extra ──
+  { cat: "App.5 – Masters", ref: "Appendix 5",
+    q: "What is the contest duration and golden score format for Masters M7/F7 and above?",
+    opts: ["3 minutes, unlimited golden score", "2.5 minutes, 1 minute golden score — winner decided by referee judgement if still tied", "4 minutes, unlimited golden score", "2 minutes, unlimited golden score"],
+    a: 1, exp: "M7/F7 and over: TWO AND A HALF minutes contest, ONE MINUTE golden score. If still tied after that, the referee decides based on who came closest to scoring and who showed more positive judo." },
+
+];
+
+// ════════════════════════════════════════════════════════════════
+//  CATEGORIES
+// ════════════════════════════════════════════════════════════════
+const CATEGORIES = [
+  { id: "random",  label: "Random Mix",             icon: "&#127922;", desc: "15 questions drawn randomly from all articles", count: "All articles" },
+  { id: "scoring", label: "Scoring",                icon: "&#127942;", desc: "Ippon, Waza-ari, Yuko and Osaekomi rules", count: "Art.7, 14, 15, 16, 17" },
+  { id: "penalties",label: "Penalties",             icon: "&#9888;", desc: "Shido, hansoku-make, and prohibited acts", count: "Article 18" },
+  { id: "officials",label: "Officials & Gestures",  icon: "&#128587;", desc: "Referees, judges, signals and procedures", count: "Art.1, 2, 3, 4" },
+  { id: "contest", label: "Contest Management",     icon: "&#9201;", desc: "Duration, start, end, golden score, injury", count: "Art.6, 9, 13, 19, 20" },
+  { id: "location",label: "Location & Transitions", icon: "&#128208;", desc: "Valid areas, ne-waza, tachi-waza rules", count: "Art.5, 10, 11, 12" },
+  { id: "equipment",label: "Equipment & Judogi",    icon: "&#128088;", desc: "Judogi rules, field of play, hygiene", count: "App.1, 2, 3" },
+];
+
+const CAT_MAP = {
+  scoring:   q => ["Art.7","Art.14","Art.15","Art.16","Art.17"].some(a => q.ref.includes(a.replace("Art.","")||a)),
+  penalties: q => q.ref.includes("18"),
+  officials: q => ["Article 1","Article 2","Article 3","Article 4"].includes(q.ref),
+  contest:   q => ["Article 6","Article 9","Article 13","Article 19","Article 20"].includes(q.ref),
+  location:  q => ["Article 5","Article 10","Article 11","Article 12"].includes(q.ref),
+  equipment: q => ["Appendix 1","Appendix 2","Appendix 3"].includes(q.ref),
+};
+
+// Map article refs more robustly
+function qMatchesCat(q, catId) {
+  if (catId === "random") return true;
+  const ref = q.ref;
+  if (catId === "scoring")    return ["Article 7","Article 14","Article 15","Article 16","Article 17"].includes(ref);
+  if (catId === "penalties")  return ref === "Article 18";
+  if (catId === "officials")  return ["Article 1","Article 2","Article 3","Article 4"].includes(ref);
+  if (catId === "contest")    return ["Article 6","Article 9","Article 13","Article 19","Article 20"].includes(ref);
+  if (catId === "location")   return ["Article 5","Article 10","Article 11","Article 12"].includes(ref);
+  if (catId === "equipment")  return ["Appendix 1","Appendix 2","Appendix 3"].includes(ref);
+  return false;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════════════
+let state = { catId: null, pool: [], idx: 0, correct: 0, wrong: 0, missed: [] };
+
+// Cards are hardcoded in HTML - no buildHome needed
+
+// ════════════════════════════════════════════════════════════════
+//  QUIZ LOGIC
+// ════════════════════════════════════════════════════════════════
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function startQuiz(catId) {
+  state.catId = catId;
+  let pool = QUESTIONS.filter(q => qMatchesCat(q, catId));
+  pool = shuffle(pool);
+  if (catId === 'random') pool = pool.slice(0, 20);
+  state.pool = pool;
+  state.idx = 0; state.correct = 0; state.wrong = 0; state.missed = [];
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.pool[state.idx];
+  const total = state.pool.length;
+  const pct = Math.round((state.idx / total) * 100);
+
+  document.getElementById('quizCategoryLabel').textContent = CATEGORIES.find(c=>c.id===state.catId).label;
+  document.getElementById('quizMeta').textContent = `Question ${state.idx+1} of ${total}`;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('scoreCorrect').textContent = state.correct;
+  document.getElementById('scoreWrong').textContent = state.wrong;
+  document.getElementById('questionRef').textContent = q.ref;
+  document.getElementById('questionText').textContent = q.q;
+
+  // Shuffle options preserving correct answer
+  const indices = shuffle([0,1,2,3]);
+  const letters = ['A','B','C','D'];
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const exp = document.getElementById('explanation');
+  exp.className = 'explanation';
+
+  indices.forEach((origIdx, displayPos) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.dataset.orig = origIdx;
+    btn.disabled = false;
+    btn.onclick = () => selectAnswer(origIdx, q);
+    btn.innerHTML = `<span class="option-letter">${letters[displayPos]}</span>${q.opts[origIdx]}`;
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('nextBtn').style.display = 'none';
+}
+
+function selectAnswer(chosen, q) {
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.disabled = true;
+    const orig = parseInt(btn.dataset.orig);
+    if (orig === q.a) btn.classList.add(chosen === q.a ? 'correct' : 'reveal');
+    else if (orig === chosen && chosen !== q.a) btn.classList.add('wrong');
+  });
+
+  const correct = chosen === q.a;
+  if (correct) state.correct++;
+  else { state.wrong++; state.missed.push(q); }
+
+  document.getElementById('scoreCorrect').textContent = state.correct;
+  document.getElementById('scoreWrong').textContent = state.wrong;
+
+  const exp = document.getElementById('explanation');
+  exp.innerHTML = `<strong>${correct ? '✓ Correct!' : '✗ Incorrect.'}</strong> ${q.exp}`;
+  exp.className = 'explanation show';
+
+  document.getElementById('nextBtn').style.display = '';
+}
+
+function nextQuestion() {
+  state.idx++;
+  if (state.idx >= state.pool.length) showResults();
+  else renderQuestion();
+}
+
+// ════════════════════════════════════════════════════════════════
+//  RESULTS
+// ════════════════════════════════════════════════════════════════
+function showResults() {
+  showScreen('results');
+  const total = state.pool.length;
+  const pct = Math.round((state.correct / total) * 100);
+
+  document.getElementById('resultsPct').textContent = pct + '%';
+  document.getElementById('bdTotal').textContent = total;
+  document.getElementById('bdCorrect').textContent = state.correct;
+  document.getElementById('bdWrong').textContent = state.wrong;
+
+  // Ring animation
+  const circ = 2 * Math.PI * 68;
+  const offset = circ - (pct / 100) * circ;
+  setTimeout(() => {
+    document.getElementById('ringFill').style.strokeDashoffset = offset;
+  }, 100);
+
+  // Grade
+  let grade, msg;
+  if (pct >= 90) { grade = 'Excellent'; msg = 'Outstanding knowledge of the BJA contest rules. You are referee-ready!'; document.getElementById('resultsGrade').style.color = '#6dffaa'; }
+  else if (pct >= 75) { grade = 'Good Pass'; msg = 'Solid understanding. Review the missed questions to sharpen up any gaps.'; document.getElementById('resultsGrade').style.color = '#D4AF37'; }
+  else if (pct >= 60) { grade = 'Pass'; msg = 'A reasonable base, but the rules require precision. Work through the articles you struggled with.'; document.getElementById('resultsGrade').style.color = '#ff9944'; }
+  else { grade = 'Study More'; msg = 'The rules require careful revision. Focus on the articles linked in the missed questions below.'; document.getElementById('resultsGrade').style.color = '#C8102E'; }
+
+  document.getElementById('resultsGrade').textContent = grade;
+  document.getElementById('resultsMsg').textContent = msg;
+
+  // Review missed
+  const rev = document.getElementById('reviewSection');
+  if (state.missed.length === 0) {
+    rev.innerHTML = '<div class="review-header">Perfect Score! 🎉</div><p style="color:var(--muted);font-size:.9rem">You answered every question correctly. Excellent work!</p>';
+  } else {
+    let html = `<div class="review-header">Missed Questions (${state.missed.length})</div>`;
+    state.missed.forEach(q => {
+      html += `<div class="review-item">
+        <div class="q">${q.q}</div>
+        <div class="a">✓ ${q.opts[q.a]}</div>
+        <div class="ref">📖 Refer to: ${q.ref} — ${q.cat}</div>
+      </div>`;
+    });
+    rev.innerHTML = html;
+  }
+}
+
+function retryQuiz() { startQuiz(state.catId); }
+
+// ════════════════════════════════════════════════════════════════
+//  SCREEN MANAGEMENT
+// ════════════════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goHome() { showScreen('home'); }
+
+// ════════════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════════════
+</script>
+</body>
+</html>
